@@ -17,6 +17,7 @@ def search(q = None):
         q = request.form['search']
         return redirect(f'/search/{q}')
     datalist = getAllData(q)
+    print(len(datalist))
     return render_template('search.html', datalist=datalist, q=q)
 
 @app.route('/product/')
