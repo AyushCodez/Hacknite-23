@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect
-from data import getAllData
 from get_comments import Data, get_keywords, get_links
 
 app = Flask(__name__)
