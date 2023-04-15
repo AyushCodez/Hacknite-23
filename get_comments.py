@@ -5,6 +5,7 @@ from selenium import webdriver
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
+from time import time
 
 def get_keywords(URL):
 
@@ -20,21 +21,9 @@ def get_keywords(URL):
     actions.move_to_element(element).perform()
     a = driver.find_elements(By.CLASS_NAME,"a-declarative")
 
-    # ans = 0
-    
-    # for i in a:
-    #     if i.get_attribute("data-action") == "reviews:filter-action:apply":
-    #         ans+=1
-    #         print(i.text)
-    
-    # print(ans, "LOOK HERE")
-
     r = driver.page_source
 
     soup = BeautifulSoup(r, "html.parser")
-
-    # with open("temp.html","w",encoding="utf-8") as f:
-    #     f.write(str(soup))
 	
     para = soup.find_all('span', attrs = {"data-action":"reviews:filter-action:apply"})
     
@@ -46,8 +35,11 @@ def get_keywords(URL):
 def get_links(keyword: str):
 
     keyword = keyword.replace(" ", "+")
-    HEADERS = ({'User-Agent':'Chrome/44.0.2403.157', 'Accept-Language': 'en-US, en;q=0.5'})
-    r = requests.get(f"https://www.amazon.in/s?k={keyword}", headers= HEADERS)
+    HEADERS = ({'User-Agent':'Chrome/44.0.2403.159', 'Accept-Language': 'en-US, en;q=0.5'})
+    ms_before = int(time()*1000)
+    r = requests.get(f"https://www.amazon.in/s?k={keyword}", headers=HEADERS)
+    ms_now = int(time()*1000)
+    print(ms_now-ms_before,'ms')
 
     soup = BeautifulSoup(r.content,"html.parser")
 
@@ -57,7 +49,7 @@ def get_links(keyword: str):
 
     elem = soup.find_all('div', attrs= {"data-component-type":"s-search-result"})
 
-    links = []
+    links, names, images, prices, ratings = [], [], [], [], []
     for i in elem:
         temp = i.find('a')
         t = temp["href"]
