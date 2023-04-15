@@ -6,8 +6,6 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 
-
-
 def get_keywords(URL):
 
     driver = webdriver.Chrome(executable_path="chromedriver.exe")
@@ -33,16 +31,18 @@ def get_keywords(URL):
 
     r = driver.page_source
 
-
     soup = BeautifulSoup(r, "html.parser")
 
-    with open("temp.html","w",encoding="utf-8") as f:
-        f.write(str(soup))
+    # with open("temp.html","w",encoding="utf-8") as f:
+    #     f.write(str(soup))
 	
     para = soup.find_all('span', attrs = {"data-action":"reviews:filter-action:apply"})
     
     for i in para:
         print(i.text.strip())
+
+    driver.quit()
+
 def get_links(keyword: str):
 
     keyword = keyword.replace(" ", "+")

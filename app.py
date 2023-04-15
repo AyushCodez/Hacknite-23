@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-import data
+from data import getAllData
 
 app = Flask(__name__)
 
@@ -16,7 +16,7 @@ def search(q = None):
     if request.method == 'POST':
         q = request.form['search']
         return redirect(f'/search/{q}')
-    datalist = data.getAllData()
+    datalist = getAllData(q)
     return render_template('search.html', datalist=datalist, q=q)
 
 @app.route('/product/')

@@ -129,3 +129,6 @@ dmypy.json
 .pyre/
 chromedriver.exe
 .vscode/settings.json
+
+# temp file
+temp.html
