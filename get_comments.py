@@ -6,11 +6,13 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 
-driver = webdriver.Chrome(executable_path="chromedriver.exe")
-options = webdriver.ChromeOptions() 
-options.add_experimental_option('excludeSwitches', ['enable-logging'])
+
 
 def get_keywords(URL):
+
+    driver = webdriver.Chrome(executable_path="chromedriver.exe")
+    options = webdriver.ChromeOptions() 
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
     driver.get(URL)
     time.sleep(1)
@@ -19,7 +21,7 @@ def get_keywords(URL):
     actions = ActionChains(driver)
     actions.move_to_element(element).perform()
     a = driver.find_elements(By.CLASS_NAME,"a-declarative")
-    
+
     # ans = 0
     
     # for i in a:
@@ -41,8 +43,9 @@ def get_keywords(URL):
     
     for i in para:
         print(i.text.strip())
-def get_links(keyword):
+def get_links(keyword: str):
 
+    keyword = keyword.replace(" ", "+")
     HEADERS = ({'User-Agent':'Chrome/44.0.2403.157', 'Accept-Language': 'en-US, en;q=0.5'})
     r = requests.get(f"https://www.amazon.in/s?k={keyword}", headers= HEADERS)
 
