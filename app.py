@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from data import getAllData
+from get_comments import Data, get_keywords, get_links
 
 app = Flask(__name__)
 
@@ -16,7 +17,7 @@ def search(q = None):
     if request.method == 'POST':
         q = request.form['search']
         return redirect(f'/search/{q}')
-    datalist = getAllData(q)
+    datalist = get_links(q)
     print(len(datalist))
     return render_template('search.html', datalist=datalist, q=q)
 
