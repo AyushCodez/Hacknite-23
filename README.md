@@ -4,17 +4,19 @@
 
 SwiftScore is a project designed to help customers make informed decisions by analyzing the sentiment of product reviews. With this, customers can quickly and easily check out the sentiment of reviews on different aspects of a product, such as its quality, price, durability, and customer service.
 
-It collects reviews from e-commerce websites (Amazon and eBay) and applies sentiment analysis on the reviews. The sentiment analysis algorithm can identify whether a review is positive, negative, or neutral and can also identify the specific aspects of the product.
+It collects reviews from e-commerce websites (Amazon, eBay) and applies sentiment analysis on the reviews. The sentiment analysis algorithm can identify whether a review is positive, negative, or neutral regarding a certain keyword.
 
-In summary, SwiftScore is a valuable tool for customers looking to quickly and easily check the sentiment of product reviews and make informed purchasing decisions.
+In summary, SwiftScore is a valuable tool for customers looking to quickly and easily check the reviews' sentiment regarding specific aspects of a product.
 
 ## Steps to use this project
 
 1. Head over to the search bar on the home page, and type in the name of the product you want to see.
 
-2. A list of items comes up. Click on the name of the one you want to visit.
+2. A list of items comes up from various e-commerce sites. Click on the name of the one you want to visit.
 
 3. Enter the keyword you want to search the sentiment for.
+
+4. A value shows up that is classified to be neutral/positive/negative. A 0 value stands for a neutral outlook of the reviews on the topic. The more positive the value the better the reviews about that certain part of the product, and vice versa for negative values.
 
 ## Dependencies
  This project uses the following dependencies:
@@ -29,13 +31,15 @@ textblob
 
 ## How to run the project
 
+These instructions assume that Python version 3.8 or higher has been installed on the system and is on the `PATH` in case of Windows.
+
 1. Install dependencies: Make sure you're in the same directory as `requirements.txt` and enter the following on the command line:  
     a. macOS/Linux:  `python3 -m pip install -r requirements.txt`  
     b. Windows: `pip install -r requirements.txt`
 
 2. Run the flask server: Make sure you're in the same directory as `app.py` and enter `flask run` on the command line.
 
-3. A hyperlink to the server
+3. A hyperlink to the server will show up on the command line. Follow that link to reach the local host. You can access the site using this link.
 
 
 
