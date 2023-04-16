@@ -18,29 +18,30 @@
         </div>
       </form>
 
-      <h1 style="padding: 50px; text-align: center; font-size: 40px;">{{ datalist|length }} results for "{{ q }}"</h1>
+      <h1 style="padding: 50px; text-align: center; font-size: 40px;">{{ dl|length }} results for "{{ q }}"</h1>
 
-        {% for data in datalist %}
+        {% for i in range(dl|length) %}
             <div class="card" style="margin: 20px; width: 75%;">
                 <div class="card-body" style="max-height: 340px; height: 340px; display: grid; grid-template-columns: 25% 40% 35%; grid-template-rows: 36% 27% 27%; gap: 34px 34px;">
-                        <div style="height: 300px; width: 300px; overflow: hidden; padding: 10px; grid-column-start: 1; grid-column-end: 2; grid-row-start: 1; grid-row-end: 4;">
-                            <img class="card-img-left" style="display: block; height: 100%; max-height: 100%; margin: auto;" src="{{ data.image }}">
-                        </div>
-                        <div style="padding: 10px; text-align: left; grid-column-start: 2; grid-column-end: 4; grid-row-start: 1; grid-row-end: 2; vertical-align: middle;">
-                            <h2 style="font-size: 50px; white-space: nowrap;">{{ data.name }}</h2>
-                        </div>
-                        <div style="padding: 10px; text-align: left; grid-column-start: 2; grid-column-end: 3; grid-row-start: 2; grid-row-end: 3; vertical-align: middle;">
-                            <h5 style="font-weight: bold; font-size: 30px;">₹{{ data.price }}</h5>
-                        </div>
-                        <div style="padding: 10px; text-align: left; grid-column-start: 3; grid-column-end: 4; grid-row-start: 2; grid-row-end: 3; vertical-align: middle;">
-                            <h5 style="font-size: 30px;">{{ data.rating }}</h5>
-                        </div>
-                        <div style="padding: 10px; text-align: left; grid-column-start: 2; grid-column-end: 4; grid-row-start: 3; grid-row-end: 4; vertical-align: middle;">
-                            <a href="{{ data.link }}"><button class="btn btn-outline-dark" style="width: 95%;">Visit</button></a>
-                        </div>
+                    <div style="height: 300px; width: 300px; overflow: hidden; padding: 10px; grid-column-start: 1; grid-column-end: 2; grid-row-start: 1; grid-row-end: 4;">
+                        <img class="card-img-left" style="display: block; max-width: 100%; max-height: 100%; margin: auto;" src="{{ dl[i].image }}">
+                    </div>
+                    <div style="padding: 10px; text-align: left; grid-column-start: 2; grid-column-end: 4; grid-row-start: 1; grid-row-end: 2; vertical-align: middle;">
+                        <a href="{{ url_for('product', index=i, keyword='') }}"><h2 style="font-size: 50px; white-space: nowrap;">{{ dl[i].name }}</h2></a>
+                    </div>
+                    <div style="padding: 10px; text-align: left; grid-column-start: 2; grid-column-end: 3; grid-row-start: 2; grid-row-end: 3; vertical-align: middle;">
+                        <h5 style="font-weight: bold; font-size: 30px;">{{ dl[i].price }}</h5>
+                    </div>
+                    <div style="padding: 10px; text-align: left; grid-column-start: 3; grid-column-end: 4; grid-row-start: 2; grid-row-end: 3; vertical-align: middle;">
+                        <h5 style="font-size: 30px;">{{ dl[i].rating }}</h5>
+                    </div>
+                    <div style="padding: 10px; text-align: left; grid-column-start: 2; grid-column-end: 4; grid-row-start: 3; grid-row-end: 4; vertical-align: middle;">
+                        <a href="{{ dl[i].link }}"><button class="btn btn-outline-dark" style="width: 95%;">Visit</button></a>
+                    </div>
                 </div>
             </div>
         {% endfor %}
+        <div style="height: 200px;"></div>
     </div>
   </body>
 </html>
