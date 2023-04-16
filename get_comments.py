@@ -24,12 +24,12 @@ class Data:
 
 def get_keywords(URL):
 
-    driver = webdriver.Chrome(executable_path="chromedriver.exe")
+    driver = webdriver.Chrome()
     options = webdriver.ChromeOptions() 
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
     driver.get(URL)
-    time.sleep(5)
+    time.sleep(1)
     element = driver.find_element(By.CLASS_NAME,"cr-widget-TitleRatingsHistogram")
 
     actions = ActionChains(driver)
@@ -53,20 +53,17 @@ def get_links(keyword: str):
     keyword = keyword.replace(" ", "+")
     HEADERS = ({'User-Agent':'Chrome/44.0.2403.159', 'Accept-Language': 'en-US, en;q=0.5'})
 
-    #web scraping amazon search results
+    #web scraping amazon search results and getting details of each link
 
     r = requests.get(f"https://www.amazon.in/s?k={keyword}", headers=HEADERS)
 
     soup = BeautifulSoup(r.content,"html.parser")
 
-    with open("temp.html","w",encoding="utf-8") as f:
-        f.write(str(soup))
-	
-
     elem = soup.find_all('div', attrs= {"data-component-type":"s-search-result"})
 
     data = []
     for i in elem:
+        flag = False
         try:
             temp = i.find('a')
             t = temp["href"]
@@ -74,7 +71,6 @@ def get_links(keyword: str):
                 temp = temp.find_next('a')
                 t = temp["href"]
             link = "https://www.amazon.in" + t
-            print(link)
         except:
             link = "N/A"
         
@@ -91,6 +87,7 @@ def get_links(keyword: str):
         stars = i.find('div', attrs = {"class": "a-size-small"})
         if stars:
             stars = stars.find('span')["aria-label"]
+            flag = True
         else:
             stars = "N/A"
 
@@ -99,15 +96,13 @@ def get_links(keyword: str):
         except:
             price = "N/A"
         
-        data.append(Data(link,title,img,price,stars))
+        if flag:
+            data.append(Data(link,title,img,price,stars))
 
     
-    #web scraping ebay search results
+    #web scraping ebay search results and getting details of each link
     r = requests.get(f"https://www.ebay.com/sch/i.html?&_nkw={keyword}", headers= HEADERS)
     soup = BeautifulSoup(r.content,"html.parser")
-
-    with open("temp.html","w",encoding="utf-8") as f:
-        f.write(str(soup))
 
     elem = soup.find_all('li', attrs= {"class":"s-item"})
     if elem:

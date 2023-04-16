@@ -2,6 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 from get_comments import get_keywords
 from textblob import TextBlob
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+import time
 
 def get_sent(url: str, keys: list)->float:
     
@@ -35,15 +39,37 @@ def get_sent(url: str, keys: list)->float:
             
             if key_score!=0:
                 key_score/= comment_num
-            d[i] = key_score
+
+            if comment_num >=3:
+                d[i] = key_score
         print(d)
         return d
     
     if 'https://www.ebay.com' in url:
+        driver = webdriver.Chrome()
+        options = webdriver.ChromeOptions() 
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])
+
+        driver.get(url)
+
+        div1 = driver.find_element(By.CLASS_NAME, "reviews-right")
+        div = div1.find_element(By.CLASS_NAME, "reviews-header")
+        actions = ActionChains(driver)
+        actions.move_to_element(div).perform()
+        print(div.text)
         
+        time.sleep(1)
 
+        button = div.find_element(By.CLASS_NAME, "sar-btn")
+        button.click()
+        
+        r = driver.page_source
+        driver.close()
 
+        soup = BeautifulSoup(r, "html.parser")
 
-link = "https://www.amazon.in/roboCraze-Arduino-Development-Board-cable/dp/B07G4C4D8F"
-keys = get_keywords(link)
+link = "https://www.amazon.in/HP-Gaming-Mouse-G200-7QV30AA/dp/B08498186T"
+link = "https://www.ebay.com/itm/185829460367"
+#keys = get_keywords(link)
+keys = ["battery"]
 get_sent(link,keys)
