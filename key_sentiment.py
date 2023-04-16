@@ -101,7 +101,7 @@ def get_sent(url: str, keys: list)->float:
                 key_score/= comment_num
             
             if comment_num >=3:
-                d[i] = key_score
+                d[i] = round(key_score,4)
             else:
                 d[i] = 0
         print(d)
