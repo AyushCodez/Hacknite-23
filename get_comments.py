@@ -25,9 +25,11 @@ class Data:
 def get_keywords(URL):
 
     if 'https://www.amazon.in' in URL:
-        driver = webdriver.Chrome()
         options = webdriver.ChromeOptions() 
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        options.add_argument('--headless')
+        options.headless = True
+        driver = webdriver.Chrome(options=options)
 
         driver.get(URL)
         time.sleep(3)

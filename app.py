@@ -45,10 +45,15 @@ def product(index: int, keyword=None):
     if (not keyword and words):
         val = get_sent(link, [words[0]])
         keyword = words[0]
+    elif (not keyword):
+        keyword = ''
+        val = get_sent(link, [keyword])
     else:
         val = get_sent(link, [keyword])
-    print('----------------------------'+index+'----------------------------')
-    print('----------------------------'+keyword+'----------------------------')
+    if (not val):
+        val = {'':0.0}
+    # print('----------------------------'+index+'----------------------------')
+    # print('----------------------------'+keyword+'----------------------------')
     return render_template('product.html', name=name, link=link, image=image, price=price, rating=rating, keyword=keyword, wordlist=words, val=val, get_sent=get_sent)
 
 # onclick="{{ url_for('app.result') }}"

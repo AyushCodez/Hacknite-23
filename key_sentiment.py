@@ -58,9 +58,11 @@ def get_sent(url: str, keys: list)->float:
         return d
     
     if 'https://www.ebay.com' in url:
-        driver = webdriver.Chrome()
         options = webdriver.ChromeOptions() 
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        options.add_argument('--headless')
+        options.headless = True
+        driver = webdriver.Chrome(options=options)
 
         driver.get(url)
 
