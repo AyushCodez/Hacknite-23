@@ -22,23 +22,30 @@ def get_sent(url: str, keys: list)->float:
             key_score = 0
             comment_num = 0
             for comment_element in comment_elements:
+                
                 comment_score = 0
                 sent_num = 0
                 comment_text = comment_element.find('span', {'data-hook': 'review-body'}).text
+                flag = False
                 for sent in comment_text.split('.'):
+                    
                     sent = sent.strip()
-                    if i in sent:
+                    sent = sent.lower()
+                    if i.lower() in sent:
+                        flag = True
                         sent_blob = TextBlob(sent)
                         comment_score+=sent_blob.sentiment.polarity
                         sent_num+=1
                 
-                if comment_score!=0:
+                if flag:
                     comment_num+=1
-                    comment_score /=sent_num
+                    if sent_num!=0:
+                        comment_score /=sent_num
                 key_score+=comment_score
             
             if key_score!=0:
                 key_score/= comment_num
+            
 
             if comment_num >=3:
                 d[i] = key_score
@@ -73,17 +80,21 @@ def get_sent(url: str, keys: list)->float:
             for comment_element in comment_elements:
                 comment_score = 0
                 sent_num = 0
+                flag = False
                 comment_text = comment_element.find('p', {'itemprop':'reviewBody'}).text
                 for sent in comment_text.split('.'):
                     sent = sent.strip()
-                    if i in sent:
+                    sent = sent.lower()
+                    if i.lower() in sent:
+                        flag = True
                         sent_blob = TextBlob(sent)
                         comment_score+=sent_blob.sentiment.polarity
                         sent_num+=1
                 
-                if comment_score!=0:
+                if flag:
                     comment_num+=1
-                    comment_score /=sent_num
+                    if sent_num!=0:
+                        comment_score /=sent_num
                 key_score+=comment_score
             
             if key_score!=0:
@@ -98,6 +109,7 @@ def get_sent(url: str, keys: list)->float:
 if __name__ == '__main__':
     link = "https://www.amazon.in/HP-Gaming-Mouse-G200-7QV30AA/dp/B08498186T"
     link = "https://www.ebay.com/itm/185829460367"
-    #keys = get_keywords(link)
-    keys = ["weights"]  
+    link = "https://www.amazon.in/Redgear-Gaming-Semi-Honeycomb-Design-Windows/dp/B09GP6CHJZ"
+    keys = get_keywords(link)
+    #keys = ["value for money"]  
     get_sent(link,keys)
