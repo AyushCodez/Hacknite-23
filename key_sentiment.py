@@ -8,6 +8,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 
 def get_sent(url: str, keys: list)->float:
+
+    print(keys)
     
     HEADERS = ({'User-Agent':'Chrome/44.0.2403.159', 'Accept-Language': 'en-US, en;q=0.5'})
     d = dict()
@@ -15,40 +17,43 @@ def get_sent(url: str, keys: list)->float:
     if 'https://www.amazon.in' in url:
         url = url.replace("/dp/","/product-reviews/") + "/"
         for i in keys:
-            temp = url + "/?filterByKeyword=" + i.replace(" ","+")
-            response = requests.get(temp, headers=HEADERS)
-            soup = BeautifulSoup(response.text, 'html.parser')
-            comment_elements = soup.find_all('div', {'data-hook': 'review'})
-            key_score = 0
-            comment_num = 0
-            for comment_element in comment_elements:
-                
-                comment_score = 0
-                sent_num = 0
-                comment_text = comment_element.find('span', {'data-hook': 'review-body'}).text
-                flag = False
-                for sent in comment_text.split('.'):
+            if(i is not None):
+                temp = url + "/?filterByKeyword=" + i.replace(" ","+")
+                response = requests.get(temp, headers=HEADERS)
+                soup = BeautifulSoup(response.text, 'html.parser')
+                comment_elements = soup.find_all('div', {'data-hook': 'review'})
+                key_score = 0
+                comment_num = 0
+                for comment_element in comment_elements:
                     
-                    sent = sent.strip()
-                    sent = sent.lower()
-                    if i.lower() in sent:
-                        flag = True
-                        sent_blob = TextBlob(sent)
-                        comment_score+=sent_blob.sentiment.polarity
-                        sent_num+=1
+                    comment_score = 0
+                    sent_num = 0
+                    comment_text = comment_element.find('span', {'data-hook': 'review-body'}).text
+                    flag = False
+                    for sent in comment_text.split('.'):
+                        
+                        sent = sent.strip()
+                        sent = sent.lower()
+                        if i.lower() in sent:
+                            flag = True
+                            sent_blob = TextBlob(sent)
+                            comment_score+=sent_blob.sentiment.polarity
+                            sent_num+=1
+                    
+                    if flag:
+                        comment_num+=1
+                        if sent_num!=0:
+                            comment_score /=sent_num
+                    key_score+=comment_score
                 
-                if flag:
-                    comment_num+=1
-                    if sent_num!=0:
-                        comment_score /=sent_num
-                key_score+=comment_score
-            
-            if key_score!=0:
-                key_score/= comment_num
-            
+                if key_score!=0:
+                    key_score/= comment_num
+                
 
-            if comment_num >=3:
-                d[i] = key_score
+                if comment_num >=3:
+                    d[i] = key_score
+                else:
+                    d[i] = 0
         print(d)
         return d
     

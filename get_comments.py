@@ -24,29 +24,32 @@ class Data:
 
 def get_keywords(URL):
 
-    driver = webdriver.Chrome()
-    options = webdriver.ChromeOptions() 
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    if 'https://www.amazon.in' in URL:
+        driver = webdriver.Chrome()
+        options = webdriver.ChromeOptions() 
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
-    driver.get(URL)
-    time.sleep(3)
-    element = driver.find_element(By.CLASS_NAME,"cr-widget-TitleRatingsHistogram")
+        driver.get(URL)
+        time.sleep(3)
+        element = driver.find_element(By.CLASS_NAME,"cr-widget-TitleRatingsHistogram")
 
-    actions = ActionChains(driver)
-    actions.move_to_element(element).perform()
+        actions = ActionChains(driver)
+        actions.move_to_element(element).perform()
 
-    r = driver.page_source
+        r = driver.page_source
 
-    soup = BeautifulSoup(r, "html.parser")
-	
-    para = soup.find_all('span', attrs = {"data-action":"reviews:filter-action:apply"})
-    ret = []
-    for i in para:
-        ret.append(i.text.strip())
-        print(ret[-1])
+        soup = BeautifulSoup(r, "html.parser")
+        
+        para = soup.find_all('span', attrs = {"data-action":"reviews:filter-action:apply"})
+        ret = []
+        for i in para:
+            if(i.text.strip()):
+                ret.append(i.text.strip())
+                print(ret[-1])
 
-    driver.quit()
-    return ret
+        driver.quit()
+        return ret
+    return []
 
 def get_links(keyword: str):
     
