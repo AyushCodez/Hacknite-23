@@ -52,6 +52,9 @@ def get_links(keyword: str):
     
     keyword = keyword.replace(" ", "+")
     HEADERS = ({'User-Agent':'Chrome/44.0.2403.159', 'Accept-Language': 'en-US, en;q=0.5'})
+
+    #web scraping amazon search results
+
     r = requests.get(f"https://www.amazon.in/s?k={keyword}", headers=HEADERS)
 
     soup = BeautifulSoup(r.content,"html.parser")
@@ -96,7 +99,57 @@ def get_links(keyword: str):
         except:
             price = "N/A"
         
-        data.append(Data(link,title,img,price.lstrip("₹"),stars))
+        data.append(Data(link,title,img,price,stars))
+
+    
+    #web scraping ebay search results
+    r = requests.get(f"https://www.ebay.com/sch/i.html?&_nkw={keyword}", headers= HEADERS)
+    soup = BeautifulSoup(r.content,"html.parser")
+
+    with open("temp.html","w",encoding="utf-8") as f:
+        f.write(str(soup))
+
+    elem = soup.find_all('li', attrs= {"class":"s-item"})
+    if elem:
+        elem = elem[1:]
+
+    for i in elem:
+        image = i.find('div', attrs = {"class": "s-item__image-wrapper"})
+        if(img):
+            img = image.find('img')['src']
+            title = image.find('img')['alt']
+        else:
+            img = title = "N/A"
+        
+        link = i.find('div', attrs = {"class": "s-item__image"})
+        if(link):
+            link = link.find('a')['href']
+            link = link[:link.find('?')]
+        else:
+            link = "N/A"
+
+        price = i.find('span', attrs = {"class":"s-item__price"})
+        if(price):
+            price = price.text
+        else:
+            price = "N/A"
+
+        stars = i.find('div', attrs = {"class": "x-star-rating"})
+        flag = False
+        if(stars):
+            stars = stars.find('span').text
+            flag = True
+        else:
+            stars = "N/A"
+        
+
+        # print("Title: ", title)
+        # print("Image: ", img)
+        # print("Link: ", link)
+        # print("Price: ", price)
+        # print("Stars: ",stars)
+        if flag:
+            data.append(Data(link,title,img,price,stars))
     return data
 
 
