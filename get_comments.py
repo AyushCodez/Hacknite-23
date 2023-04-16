@@ -5,7 +5,7 @@ from selenium import webdriver
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
-from time import time
+import time
 class Data:
 
     def __init__(self, link, name, image, price, rating):
@@ -29,23 +29,24 @@ def get_keywords(URL):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
     driver.get(URL)
-    time.sleep(1)
+    time.sleep(5)
     element = driver.find_element(By.CLASS_NAME,"cr-widget-TitleRatingsHistogram")
 
     actions = ActionChains(driver)
     actions.move_to_element(element).perform()
-    a = driver.find_elements(By.CLASS_NAME,"a-declarative")
 
     r = driver.page_source
 
     soup = BeautifulSoup(r, "html.parser")
 	
     para = soup.find_all('span', attrs = {"data-action":"reviews:filter-action:apply"})
-    
+    ret = []
     for i in para:
-        print(i.text.strip())
+        ret.append(i.text.strip())
+        print(ret[-1])
 
     driver.quit()
+    return ret
 
 def get_links(keyword: str):
     

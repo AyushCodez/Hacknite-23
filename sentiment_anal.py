@@ -7,6 +7,6 @@ def get_sentiment(text):
     return sentiment
 
 # Use the model to predict the sentiment of a new text
-text = "Winning the lottery was the most incredible moment of my life, it felt like all my dreams had come true."
+text = input()
 sentiment = get_sentiment(text)
 print(sentiment) # Output: 'positive'
