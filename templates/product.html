@@ -94,9 +94,16 @@
           <script>
             const sentBar = document.getElementById('keyword-sentiment-bar');
             var val = parseFloat(document.getElementById('contains-val').innerHTML);
-            var gradr = (val+1)*255/2;
-            var gradg = 255 - ((val+1)*255/2);
+            // val is from -1 to 1
             var gradb = 0;
+            if (val <= 0)
+              gradr = 255;
+            else
+              gradr = 255*(1-val);
+            if (val <= 0)
+              gradg = 255*(val+1);
+            else
+              gradg = 255;
             var str = "rgb("+gradr+", "+gradg+", "+gradb+")";
             sentBar.style.backgroundColor = str;
             w = val > 0 ? val*50 : val*(-50);
@@ -109,9 +116,15 @@
             function updateBar(keyword) {
               var val = (get_sent(link, [keyword]))[keyword];
               document.getElementById('contains-val').innerHTML = val;
-              var gradr = (val+1)*255/2;
-              var gradg = 255 - ((val+1)*255/2);
               var gradb = 0;
+              if (val <= 0)
+                gradr = 255;
+              else
+                gradr = 255*(1-val);
+              if (val <= 0)
+                gradg = 255*(val+1);
+              else
+                gradg = 255;
               var str = "rgb("+gradr+", "+gradg+", "+gradb+")";
               sentBar.style.backgroundColor = str;
               w = val > 0 ? val*50 : val*(-50);
