@@ -83,7 +83,7 @@
             <option>{{ word }}</option>
           {% endfor %}
         </datalist>
-        <h5 style="font-size: 30px; margin: 10px;">Reviews: {{ val[keyword]*100|round(2) }}%</h5>
+        <h5 style="font-size: 30px; margin: 10px;">Reviews: {{ (val[keyword]*100)|round(2) }}%</h5>
         <p id="contains-val" hidden>{{ val[keyword] }}</p>
         <div class="sentiment-indicator" style="background-color: #222222; margin: 10px auto; height: 10px; border-radius: 5px; position: relative;">
           <div class="sentiment-bar" id="keyword-sentiment-bar" style="background-color: #ffa600; width: 11%; height: 10px; border-radius: 5px; position: absolute; left: 39%;"></div>
