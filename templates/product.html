@@ -64,34 +64,68 @@
         </div>
       </div>
 
-      <div id="reviews" style="padding: 50px; width: 70%;">
+      <!-- <div id="reviews" style="padding: 50px; width: 70%;">
         <h2>Reviews</h2>
         <h5 style="font-size: 30px;">Ratings: {{ rating }}</h5>
         <h5 style="font-size: 30px;">Reviews: Positive (68%)</h5>
         <div class="sentiment-indicator" style="background-color: #222222; margin: 10px auto; height: 10px; border-radius: 5px; position: relative;">
             <div class="sentiment-bar" style="background-color: #48ff00; width: 34%; height: 10px; border-radius: 5px; position: absolute; left: 50%;"></div>
         </div>
-      </div>
+      </div> -->
 
       <div id="keywords" style="padding: 50px; width: 70%;">
         <h5 style="font-size: 30px; margin: 10px;">Select field:</h5>
         <!-- <input class="form-control rounded" type="text" list="words" style="width: 50%; margin: 10px;" onsubmit="setBarWidth('keyword-sentiment-bar', 0.22)"> -->
-        <form action="" style="width: 50%;">
+        <form method="post" action="" style="width: 50%;">
           <div class="input-group rounded" style="padding: 50px;">
-            <input class="form-control rounded" type="text" list="words" placeholder="Search for a keyword"/>
+            <input id="keysearch" class="form-control rounded" type="text" list="words" placeholder="Search for a keyword" value="{{ keyword }}" name="keyword" onsubmit="{{ url_for('product', index=index, keyword=keyword) }}"/>
             <button type="submit" class="btn btn-outline-dark">Go</button>
           </div>
         </form>
         <datalist id="words">
-          <option>Battery Life</option>
-          <option>Processing Power</option>
-          <option>Camera</option>
+          {% for word in wordlist %}
+            <option>{{ word }}</option>
+          {% endfor %}
         </datalist>
-        <h5 style="font-size: 30px; margin: 10px;">Reviews: Slightly Negative (-22%)</h5>
+        <h5 style="font-size: 30px; margin: 10px;">Reviews: {{ val[keyword]*100 }}%</h5>
+        <p id="contains-val" hidden>{{ val[keyword] }}</p>
         <div class="sentiment-indicator" style="background-color: #222222; margin: 10px auto; height: 10px; border-radius: 5px; position: relative;">
           <div class="sentiment-bar" id="keyword-sentiment-bar" style="background-color: #ffa600; width: 11%; height: 10px; border-radius: 5px; position: absolute; left: 39%;"></div>
+          <script>
+            const sentBar = document.getElementById('keyword-sentiment-bar');
+            var val = parseFloat(document.getElementById('contains-val').innerHTML);
+            var gradr = (val+1)*255/2;
+            var gradg = 255 - ((val+1)*255/2);
+            var gradb = 0;
+            var str = "rgb("+gradr+", "+gradg+", "+gradb+")";
+            sentBar.style.backgroundColor = str;
+            w = val > 0 ? val*50 : val*(-50);
+            sentBar.style.width = w.toString()+'%';
+            if (val >= 0)
+              sentBar.style.left = '50%';
+            else
+              sentBar.style.left = (50-w).toString()+'%';
+
+            function updateBar(keyword) {
+              var val = (get_sent(link, [keyword]))[keyword];
+              document.getElementById('contains-val').innerHTML = val;
+              var gradr = (val+1)*255/2;
+              var gradg = 255 - ((val+1)*255/2);
+              var gradb = 0;
+              var str = "rgb("+gradr+", "+gradg+", "+gradb+")";
+              sentBar.style.backgroundColor = str;
+              w = val > 0 ? val*50 : val*(-50);
+              sentBar.style.width = w.toString()+'%';
+              if (val >= 0)
+                sentBar.style.left = '50%';
+              else
+                sentBar.style.left = (50-w).toString()+'%';
+            }
+            document.getElementById('keysearch').onsubmit = () => updateBar(keyword);
+          </script>
         </div>
       </div>
+
     </div>
   </body>
 </html>

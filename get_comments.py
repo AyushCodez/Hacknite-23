@@ -29,7 +29,7 @@ def get_keywords(URL):
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
     driver.get(URL)
-    time.sleep(1)
+    time.sleep(3)
     element = driver.find_element(By.CLASS_NAME,"cr-widget-TitleRatingsHistogram")
 
     actions = ActionChains(driver)
