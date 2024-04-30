@@ -1,4 +1,4 @@
-# SwiftScore - Kotlin Sucks
+# SwiftScore
 
 ## Introduction
 
